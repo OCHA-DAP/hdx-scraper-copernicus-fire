@@ -9,7 +9,7 @@ WORKDIR /app
 # 1. Install System Dependencies
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --upgrade \
-    git 
+    git
 
 # 2. Install Dependencies
 COPY pyproject.toml uv.lock ./

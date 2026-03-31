@@ -29,8 +29,8 @@ _UPDATED_BY_SCRIPT = "HDX Scraper: Copernicus Fire"
 
 
 def main(
-        save: bool = False,
-        use_saved: bool = False,
+    save: bool = False,
+    use_saved: bool = False,
 ) -> None:
     """Generate datasets and create them in HDX"""
     logger.info(f"##### {_LOOKUP} version {__version__} ####")

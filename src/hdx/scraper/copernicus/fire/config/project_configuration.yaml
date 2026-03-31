@@ -13,7 +13,7 @@ datasets:
     format: "geojson"
     ext: "geojson"
     windows: [ 1, 7, 30 ]
-    tags: [ "climate hazards", "wildfires", "burnt area", "hazards and risk" ]
+    tags: [ "climate hazards", "damage assessment", "hazards and risk" ]
     layers:
       modis:
         endpoint: "effis"
@@ -28,7 +28,7 @@ datasets:
     format: "image/tiff"
     ext: "tif"
     forecast_days: 1
-    tags: [ "climate hazards", "wildfires", "forecast", "hazards and risk" ]
+    tags: [ "climate hazards", "forecasting", "hazards and risk" ]
     layers:
       ecmwf_fwi:
         endpoint: "gwis"

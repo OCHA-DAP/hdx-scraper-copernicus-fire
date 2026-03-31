@@ -1,9 +1,7 @@
-import os
 import logging
 import urllib.parse
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, Optional
 
 from hdx.api.configuration import Configuration
 from hdx.utilities.retriever import Retrieve
@@ -20,10 +18,16 @@ class APIRetriever:
         self._width = configuration["width"]
         self._height = configuration["height"]
 
-    def _process_wfs(self, endpoint: str, layer_name: str, target_date: datetime,
-                     filename: str, out_format: str) -> Optional[Path]:
+    def _process_wfs(
+        self,
+        endpoint: str,
+        layer_name: str,
+        target_date: datetime,
+        filename: str,
+        out_format: str,
+    ) -> tuple[Path | None, str]:
         """Downloads WFS GeoJSON exactly as the server provides it."""
-        date_str = target_date.strftime('%Y-%m-%d')
+        date_str = target_date.strftime("%Y-%m-%d")
 
         xml_filter = (
             f"<Filter><PropertyIsGreaterThanOrEqualTo>"
@@ -40,10 +44,16 @@ class APIRetriever:
         )
 
         logger.info(f"Requesting Global WFS GeoJSON: {filename}")
-        return self._retriever.download_file(url, filename=filename)
+        return self._retriever.download_file(url, filename=filename), url
 
-    def _process_wms(self, endpoint: str, layer_name: str, time_str: str, filename: str,
-                     out_format: str) -> Optional[Path]:
+    def _process_wms(
+        self,
+        endpoint: str,
+        layer_name: str,
+        time_str: str,
+        filename: str,
+        out_format: str,
+    ) -> tuple[Path | None, str]:
         """Downloads standard WMS GeoTIFF."""
         url = (
             f"{self._base_url}/{endpoint}?"
@@ -58,9 +68,9 @@ class APIRetriever:
             f"HEIGHT={self._height}&"
             f"TIME={time_str}"
         )
-        return self._retriever.download_file(url, filename=filename)
+        return self._retriever.download_file(url, filename=filename), url
 
-    def process(self, today: Optional[datetime] = None) -> Dict:
+    def process(self, today: datetime | None = None) -> dict:
         if today is None:
             today = datetime.now()
 
@@ -78,14 +88,22 @@ class APIRetriever:
                         label = f"{layer_key}_last_{days}_days"
                         filename = f"{info['name']}_{layer_key}_{days}d.geojson"
 
-                        path = self._process_wfs(layer_dict["endpoint"],
-                                                 layer_dict["layer"],
-                                                 date, filename, info["format"])
+                        path, url = self._process_wfs(
+                            layer_dict["endpoint"],
+                            layer_dict["layer"],
+                            date,
+                            filename,
+                            info["format"],
+                        )
                         if path:
                             downloaded_files[data_type][label] = {
-                                "path": path, "start_date": date, "end_date": today,
+                                "path": path,
+                                "start_date": date,
+                                "end_date": today,
                                 "layer_desc": layer_dict["description"],
-                                "time_desc": f"last {days} days", "ext": "geojson"
+                                "time_desc": f"last {days} days",
+                                "ext": "geojson",
+                                "download_url": url,
                             }
 
                 elif "forecast_days" in info:
@@ -93,14 +111,21 @@ class APIRetriever:
                     label = f"{layer_key}_forecast"
                     filename = f"{info['name']}_{layer_key}.tif"
 
-                    path = self._process_wms(layer_dict["endpoint"],
-                                             layer_dict["layer"],
-                                             date.strftime('%Y-%m-%d'), filename,
-                                             info["format"])
+                    path, url = self._process_wms(
+                        layer_dict["endpoint"],
+                        layer_dict["layer"],
+                        date.strftime("%Y-%m-%d"),
+                        filename,
+                        info["format"],
+                    )
                     if path:
                         downloaded_files[data_type][label] = {
-                            "path": path, "start_date": today, "end_date": date,
+                            "path": path,
+                            "start_date": today,
+                            "end_date": date,
                             "layer_desc": layer_dict["description"],
-                            "time_desc": "forecast", "ext": "tif"
+                            "time_desc": "forecast",
+                            "ext": "tif",
+                            "download_url": url,
                         }
         return downloaded_files

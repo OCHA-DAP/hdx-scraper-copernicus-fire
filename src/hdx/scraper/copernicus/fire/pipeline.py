@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, Optional
 
 from hdx.api.configuration import Configuration
 from hdx.data.dataset import Dataset
@@ -12,13 +11,14 @@ logger = logging.getLogger(__name__)
 
 
 class Pipeline:
-    def __init__(self, configuration: Configuration, downloaded_files: Dict):
+    def __init__(self, configuration: Configuration, downloaded_files: dict):
         self._configuration = configuration
         self._downloaded_files = downloaded_files
 
     @staticmethod
-    def generate_resource(resource_name: str, resource_description: str,
-                          file_path: Path, extension: str) -> Resource:
+    def generate_resource(
+        resource_name: str, resource_description: str, file_path: Path, extension: str
+    ) -> Resource:
         resource = Resource(
             {
                 "name": resource_name,
@@ -37,8 +37,9 @@ class Pipeline:
         resource.set_file_to_upload(file_path)
         return resource
 
-    def generate_dataset(self, data_type: str,
-                         today: Optional[datetime] = None) -> Optional[Dataset]:
+    def generate_dataset(
+        self, data_type: str, today: datetime | None = None
+    ) -> Dataset | None:
         if today is None:
             today = datetime.now()
 
@@ -74,7 +75,7 @@ class Pipeline:
 
         dataset.set_time_period(
             parse_date(start_date.strftime("%Y-%m-%d")),
-            parse_date(end_date.strftime("%Y-%m-%d"))
+            parse_date(end_date.strftime("%Y-%m-%d")),
         )
 
         dataset.add_tags(dataset_info.get("tags", []))
@@ -91,7 +92,9 @@ class Pipeline:
 
             start_str = res_start_date.strftime("%d %b %Y").lstrip("0")
             end_str = res_end_date.strftime("%d %b %Y").lstrip("0")
-            date_range = f"({start_str})" if start_str == end_str else f"({start_str}-{end_str})"
+            date_range = (
+                f"({start_str})" if start_str == end_str else f"({start_str}-{end_str})"
+            )
 
             if ext.lower() == "geojson":
                 res_desc = f"GeoJSON representing {layer_desc} {time_desc} {date_range}"

@@ -1,0 +1,11 @@
+license_id: hdx-other
+license_other: Please see licence information [here](https://forest-fire.emergency.copernicus.eu/about-effis/data-license).
+methodology: Other
+methodology_other: More information on methodology can be found [here](https://forest-fire.emergency.copernicus.eu/about-effis/technical-background).
+dataset_source: Copernicus
+package_creator: HDX Data Systems Team
+private: False
+maintainer: 196196be-6037-4488-8b71-d786adf4c081
+owner_org:  47677055-92e2-4f68-bf1b-5d570f27e791
+data_update_frequency: 1
+caveats:

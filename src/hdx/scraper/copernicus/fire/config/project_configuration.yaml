@@ -1,0 +1,100 @@
+# Collector specific configuration
+base_url: "https://maps.effis.emergency.copernicus.eu"
+bbox: "-180,-90,180,90" # Global extent
+width: 3600
+height: 1800
+
+datasets:
+  burnt_area:
+    name: "copernicus-burnt-areas"
+    title: "Burnt Areas (MODIS)"
+    notes: "Raw vector polygons of recently updated global burnt areas from MODIS. Provided as GeoJSON."
+    method: "wfs"
+    format: "geojson"
+    ext: "geojson"
+    windows: [ 1, 7, 30 ]
+    tags: [ "climate hazards", "wildfires", "burnt area", "hazards and risk" ]
+    layers:
+      modis:
+        endpoint: "effis"
+        layer: "ms:modis.ba.poly"
+        description: "MODIS Burnt Area Polygons"
+
+  fire_forecast:
+    name: "copernicus-fire-danger-forecast"
+    title: "Fire Danger Forecast"
+    notes: "Daily global forecast predicting fire danger conditions from the ECMWF model. Provided as continuous raster GeoTIFFs."
+    method: "wms"
+    format: "image/tiff"
+    ext: "tif"
+    forecast_days: 1
+    tags: [ "climate hazards", "wildfires", "forecast", "hazards and risk" ]
+    layers:
+      ecmwf_fwi:
+        endpoint: "gwis"
+        layer: "ecmwf.fwi"
+        description: "ECMWF Fire Weather Index (FWI)"
+      ecmwf_isi:
+        endpoint: "gwis"
+        layer: "ecmwf.isi"
+        description: "ECMWF Initial Spread Index (ISI)"
+      ecmwf_bui:
+        endpoint: "gwis"
+        layer: "ecmwf.bui"
+        description: "ECMWF Build Up Index (BUI)"
+      ecmwf_ffmc:
+        endpoint: "gwis"
+        layer: "ecmwf.ffmc"
+        description: "ECMWF Fine Fuel Moisture Code (FFMC)"
+      ecmwf_dmc:
+        endpoint: "gwis"
+        layer: "ecmwf.dmc"
+        description: "ECMWF Duff Moisture Code (DMC)"
+      ecmwf_dc:
+        endpoint: "gwis"
+        layer: "ecmwf.dc"
+        description: "ECMWF Drought Code (DC)"
+      ecmwf_anomaly:
+        endpoint: "gwis"
+        layer: "ecmwf.anomaly"
+        description: "ECMWF Anomaly"
+      ecmwf_ranking:
+        endpoint: "gwis"
+        layer: "ecmwf.ranking"
+        description: "ECMWF Ranking"
+      ecmwf_kbdi:
+        endpoint: "gwis"
+        layer: "ecmwf.mark5.kbdi"
+        description: "ECMWF Keetch-Byron Drought Index (KBDI)"
+      ecmwf_mark5_df:
+        endpoint: "gwis"
+        layer: "ecmwf.mark5.df"
+        description: "ECMWF MARK-5 Drought Factor (DF)"
+      ecmwf_mark5_ros:
+        endpoint: "gwis"
+        layer: "ecmwf.mark5.ros"
+        description: "ECMWF MARK-5 Rate of Spread (ROS)"
+      ecmwf_mark5_fdi:
+        endpoint: "gwis"
+        layer: "ecmwf.mark5.fdi"
+        description: "ECMWF MARK-5 Fire Danger Index (FDI)"
+      ecmwf_nfdrs_ros:
+        endpoint: "gwis"
+        layer: "ecmwf.nfdrs.ros"
+        description: "ECMWF NFDRS Rate of Spread (ROS)"
+      ecmwf_nfdrs_sc:
+        endpoint: "gwis"
+        layer: "ecmwf.nfdrs.sc"
+        description: "ECMWF NFDRS Spread Component (SC)"
+      ecmwf_nfdrs_erc:
+        endpoint: "gwis"
+        layer: "ecmwf.nfdrs.erc"
+        description: "ECMWF NFDRS Energy Release Component (ERC)"
+      ecmwf_nfdrs_bi:
+        endpoint: "gwis"
+        layer: "ecmwf.nfdrs.bi"
+        description: "ECMWF NFDRS Burning Index (BI)"
+      ecmwf_nfdrs_ic:
+        endpoint: "gwis"
+        layer: "ecmwf.nfdrs.ic"
+        description: "ECMWF NFDRS Ignition Probability (IC)"

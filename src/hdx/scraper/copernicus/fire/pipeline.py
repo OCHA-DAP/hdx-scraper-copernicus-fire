@@ -1,11 +1,11 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
 from hdx.api.configuration import Configuration
 from hdx.data.dataset import Dataset
 from hdx.data.resource import Resource
-from hdx.utilities.dateparse import parse_date
+from hdx.utilities.dateparse import default_date, default_enddate
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class Pipeline:
         ext_lower = extension.lower()
         if ext_lower == "geojson":
             resource.set_format("geojson")
-        elif ext_lower in ["tif", "tiff"]:
+        elif ext_lower == "geotiff":
             resource.set_format("geotiff")
         elif ext_lower == "zip":
             resource.set_format("zipped shapefile")
@@ -37,12 +37,7 @@ class Pipeline:
         resource.set_file_to_upload(file_path)
         return resource
 
-    def generate_dataset(
-        self, data_type: str, today: datetime | None = None
-    ) -> Dataset | None:
-        if today is None:
-            today = datetime.now()
-
+    def generate_dataset(self, data_type: str, today: datetime) -> Dataset | None:
         dataset_info = self._configuration["datasets"].get(data_type)
         if not dataset_info:
             return None
@@ -54,6 +49,23 @@ class Pipeline:
             logger.error(f"{data_type}: No data available!")
             return None
 
+        min_start_date = default_enddate
+        max_end_date = default_date
+        for layer in iter(files.values()):
+            start_date = layer["start_date"]
+            if start_date < min_start_date:
+                min_start_date = start_date
+                url = layer["download_url"]
+            end_date = layer["end_date"]
+            if end_date > max_end_date:
+                max_end_date = end_date
+                url = layer["download_url"]
+        start_date = min_start_date.strftime("%Y-%m-%d")
+        end_date = max_end_date.strftime("%Y-%m-%d")
+        logger.info(
+            f"Using dates {start_date} to {end_date} for {data_type}. Example url {url}."
+        )
+
         dataset = Dataset(
             {
                 "name": dataset_info["name"],
@@ -61,22 +73,7 @@ class Pipeline:
                 "notes": dataset_info.get("notes", ""),
             }
         )
-
-        start_date = today
-        end_date = today
-
-        if "windows" in dataset_info:
-            max_window = max(dataset_info["windows"])
-            start_date = today - timedelta(days=max_window)
-        elif "forecast_days" in dataset_info:
-            f_days = dataset_info["forecast_days"]
-            max_f = max(f_days) if isinstance(f_days, list) else f_days
-            end_date = today + timedelta(days=max_f)
-
-        dataset.set_time_period(
-            parse_date(start_date.strftime("%Y-%m-%d")),
-            parse_date(end_date.strftime("%Y-%m-%d")),
-        )
+        dataset.set_time_period(start_date, end_date)
 
         dataset.add_tags(dataset_info.get("tags", []))
         dataset.set_subnational(True)
@@ -98,7 +95,7 @@ class Pipeline:
 
             if ext.lower() == "geojson":
                 res_desc = f"GeoJSON representing {layer_desc} {time_desc} {date_range}"
-            elif ext.lower() in ["tif", "tiff"]:
+            elif ext.lower() == "geotiff":
                 res_desc = f"GeoTIFF representing {layer_desc} {time_desc} {date_range}"
             else:
                 res_desc = f"Data representing {layer_desc} {time_desc} {date_range}"
@@ -106,5 +103,5 @@ class Pipeline:
             dataset.add_update_resource(
                 self.generate_resource(file_path.name, res_desc, file_path, ext)
             )
-
+        dataset.preview_off()
         return dataset

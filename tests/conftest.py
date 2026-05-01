@@ -14,8 +14,8 @@ def fixtures_dir():
 
 
 @pytest.fixture(scope="session")
-def input_dir(fixtures_dir):
-    return join(fixtures_dir, "input")
+def input_dir():
+    return "saved_data"
 
 
 @pytest.fixture(scope="session")
@@ -45,6 +45,7 @@ def configuration(config_dir):
             for tag in (
                 "climate hazards",
                 "damage assessment",
+                "environment",
                 "forecasting",
                 "hazards and risk",
             )

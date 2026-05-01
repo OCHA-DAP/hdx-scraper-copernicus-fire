@@ -1,59 +1,69 @@
 # Collector specific configuration
 base_url: "https://maps.effis.emergency.copernicus.eu"
-bbox: "-180,-90,180,90" # Global extent
+bbox: "-180.0,-90.0,180.0,90.0" # Global extent
 width: 3600
 height: 1800
 
 datasets:
-  burnt_area:
-    name: "copernicus-burnt-areas"
-    title: "Burnt Areas (MODIS)"
-    notes: "Raw vector polygons of recently updated global burnt areas from MODIS. Provided as GeoJSON."
-    method: "wfs"
-    format: "geojson"
-    ext: "geojson"
-    windows: [ 1, 7, 30 ]
-    tags: [ "climate hazards", "damage assessment", "hazards and risk" ]
-    layers:
-      modis:
-        endpoint: "effis"
-        layer: "ms:modis.ba.poly"
-        description: "MODIS Burnt Area Polygons"
-
   fire_forecast:
     name: "copernicus-fire-danger-forecast"
     title: "Fire Danger Forecast"
-    notes: "Daily global forecast predicting fire danger conditions from the ECMWF model. Provided as continuous raster GeoTIFFs."
+    notes: "Daily global forecast predicting fire danger conditions from the ECMWF and NASA Geos-5 models. Provided as continuous raster GeoTIFFs."
     method: "wms"
     format: "image/tiff"
-    ext: "tif"
-    forecast_days: 1
+    ext: "geotiff"
+    forecast: true
+    days: 1
     tags: [ "climate hazards", "forecasting", "hazards and risk" ]
     layers:
       ecmwf_fwi:
         endpoint: "gwis"
         layer: "ecmwf.fwi"
         description: "ECMWF Fire Weather Index (FWI)"
+      nasa_geos5_fwi:
+        endpoint: "gwis"
+        layer: "nasa_geos5.fwi"
+        description: "NASA Geos-5 Fire Weather Index (FWI)"
       ecmwf_isi:
         endpoint: "gwis"
         layer: "ecmwf.isi"
         description: "ECMWF Initial Spread Index (ISI)"
+      nasa_geos5_isi:
+        endpoint: "gwis"
+        layer: "nasa_geos5.isi"
+        description: "NASA Geos-5 Initial Spread Index (ISI)"
       ecmwf_bui:
         endpoint: "gwis"
         layer: "ecmwf.bui"
         description: "ECMWF Build Up Index (BUI)"
+      nasa_geos5_bui:
+        endpoint: "gwis"
+        layer: "nasa_geos5.bui"
+        description: "NASA Geos-5 Build Up Index (BUI)"
       ecmwf_ffmc:
         endpoint: "gwis"
         layer: "ecmwf.ffmc"
         description: "ECMWF Fine Fuel Moisture Code (FFMC)"
+      nasa_geos5_ffmc:
+        endpoint: "gwis"
+        layer: "nasa_geos5.ffmc"
+        description: "NASA Geos-5 Fine Fuel Moisture Code (FFMC)"
       ecmwf_dmc:
         endpoint: "gwis"
         layer: "ecmwf.dmc"
         description: "ECMWF Duff Moisture Code (DMC)"
+      nasa_geos5_dmc:
+        endpoint: "gwis"
+        layer: "nasa_geos5.dmc"
+        description: "NASA Geos-5 Duff Moisture Code (DMC)"
       ecmwf_dc:
         endpoint: "gwis"
         layer: "ecmwf.dc"
         description: "ECMWF Drought Code (DC)"
+      nasa_geos5_dc:
+        endpoint: "gwis"
+        layer: "nasa_geos5.dc"
+        description: "NASA Geos-5 Drought Code (DC)"
       ecmwf_anomaly:
         endpoint: "gwis"
         layer: "ecmwf.anomaly"
@@ -98,3 +108,79 @@ datasets:
         endpoint: "gwis"
         layer: "ecmwf.nfdrs.ic"
         description: "ECMWF NFDRS Ignition Probability (IC)"
+      ecmwf_extra_lightning:
+        endpoint: "gwis"
+        layer: "ecmwf.extra.lightning"
+        description: "Lightning Forecast"
+
+  burnt_area:
+    name: "copernicus-burnt-areas"
+    title: "Burnt Areas (MODIS)"
+    notes: "Raw vector polygons of recently updated global burnt areas from MODIS. Provided as GeoJSON."
+    method: "wfs"
+    format: "geojson"
+    ext: "geojson"
+    forecast: false
+    days: [ 1, 7, 30 ]
+    tags: [ "climate hazards", "damage assessment", "hazards and risk" ]
+    layers:
+      modis:
+        endpoint: "effis"
+        layer: "ms:modis.ba.poly"
+        description: "MODIS Burnt Area Polygons"
+
+  fire_emissions:
+    name: "copernicus-fire-emissions"
+    title: "Fire Emissions (CAMS-GFAS)"
+    notes: "Daily global fire emissions from the Copernicus Atmosphere Monitoring Service (CAMS) Global Fire Assimilation System (GFAS). Provided as continuous raster GeoTIFFs."
+    method: "wms"
+    format: "image/tiff"
+    ext: "geotiff"
+    forecast: false
+    days: 7
+    tags: [ "climate hazards", "environment" ]
+    layers:
+      gfas_bc:
+        endpoint: "gwis"
+        layer: "gfas.bc"
+        description: "Emissions of Black Carbon (BC)"
+      gfas_ch4:
+        endpoint: "gwis"
+        layer: "gfas.ch4"
+        description: "Emissions of Methane (CH4)"
+      gfas_co2:
+        endpoint: "gwis"
+        layer: "gfas.co2"
+        description: "Emissions of Carbon Dioxide (CO2)"
+      gfas_co:
+        endpoint: "gwis"
+        layer: "gfas.co"
+        description: "Emissions of Carbon monoxide (CO)"
+      gfas_c:
+        endpoint: "gwis"
+        layer: "gfas.c"
+        description: "Emissions of Burnt Carbon (C)"
+      gfas_nmhc:
+        endpoint: "gwis"
+        layer: "gfas.nmhc"
+        description: "Emissions of Non-Methane Hydro-Carbons (NMHC)"
+      gfas_nox:
+        endpoint: "gwis"
+        layer: "gfas.nox"
+        description: "Emissions of Nitrogen Oxides (NOx)"
+      gfas_oc:
+        endpoint: "gwis"
+        layer: "gfas.oc"
+        description: "Emissions of Organic Carbon (OC)"
+      gfas_pm2p5:
+        endpoint: "gwis"
+        layer: "gfas.pm2p5"
+        description: "Emissions of Particulate Matter (PM2.5)"
+      gfas_so2:
+        endpoint: "gwis"
+        layer: "gfas.so2"
+        description: "Emissions of Sulfur Dioxide (SO2)"
+      gfas_tc:
+        endpoint: "gwis"
+        layer: "gfas.tc"
+        description: "Emissions of Total Carbon in Aerosols (TC)"

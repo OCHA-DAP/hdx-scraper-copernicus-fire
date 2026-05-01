@@ -10,6 +10,7 @@ from os.path import expanduser, join
 from hdx.api.configuration import Configuration
 from hdx.data.user import User
 from hdx.facades.infer_arguments import facade
+from hdx.utilities.dateparse import now_utc
 from hdx.utilities.downloader import Download
 from hdx.utilities.path import (
     script_dir_plus_file,
@@ -50,9 +51,10 @@ def main(
                 use_saved=use_saved,
             )
 
+            today = now_utc()
             # 1. Download the files (GeoTIFFs and GeoJSON)
             apiretriever = APIRetriever(configuration, retriever)
-            downloaded_files = apiretriever.process()
+            downloaded_files = apiretriever.process(today)
 
             # 2. Initialize the pipeline with the downloaded files
             pipeline = Pipeline(configuration, downloaded_files)
@@ -60,7 +62,7 @@ def main(
             # 3. Iterate through datasets defined in configuration
             datasets_config = configuration.get("datasets", {})
             for data_type in datasets_config.keys():
-                dataset = pipeline.generate_dataset(data_type)
+                dataset = pipeline.generate_dataset(data_type, today)
 
                 if dataset:
                     # Update standard metadata from static YAML

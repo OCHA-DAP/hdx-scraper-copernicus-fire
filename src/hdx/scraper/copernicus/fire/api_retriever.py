@@ -86,7 +86,8 @@ class APIRetriever:
             end_date_str = end_date.strftime("%Y-%m-%d")
             date_str = f"{date_str}/{end_date_str}"
         label = f"{layer_key}_{time_desc}"
-        filename = f"{info['name']}_{layer_key}_{time_desc}.{info['ext']}"
+        resource_name = info["resource_name"]
+        filename = f"{resource_name}_{layer_key}_{time_desc}.{info['ext']}"
         filename = filename.replace(f"_{day_or_days}", "d")
         return start_date, end_date, date_str, time_desc, label, filename
 

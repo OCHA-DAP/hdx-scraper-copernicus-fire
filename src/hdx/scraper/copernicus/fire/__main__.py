@@ -62,9 +62,11 @@ def main(
             # 3. Iterate through datasets defined in configuration
             datasets_config = configuration.get("datasets", {})
             for data_type in datasets_config.keys():
-                dataset = pipeline.generate_dataset(data_type, today)
+                result = pipeline.generate_dataset_and_showcase(data_type, today)
 
-                if dataset:
+                if result:
+                    dataset, showcase = result
+
                     # Update standard metadata from static YAML
                     dataset.update_from_yaml(
                         script_dir_plus_file(
@@ -79,6 +81,10 @@ def main(
                         updated_by_script=_UPDATED_BY_SCRIPT,
                         batch=info["batch"],
                     )
+
+                    if showcase:
+                        showcase.create_in_hdx()
+                        showcase.add_dataset(dataset)
 
 
 if __name__ == "__main__":

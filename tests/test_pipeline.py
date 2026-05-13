@@ -56,7 +56,7 @@ class TestCopernicusFire:
                         "ext": "geojson",
                         "layer_desc": "MODIS Burnt Area Polygons",
                         "path": Path(
-                            "saved_data/copernicus-burnt-areas_modis_last_1d.geojson"
+                            "saved_data/copernicus_burnt_areas_modis_last_1d.geojson"
                         ),
                         "start_date": one_day_ago,
                         "time_desc": "last 1 day",
@@ -75,7 +75,7 @@ class TestCopernicusFire:
                         "ext": "geojson",
                         "layer_desc": "MODIS Burnt Area Polygons",
                         "path": Path(
-                            "saved_data/copernicus-burnt-areas_modis_last_7d.geojson"
+                            "saved_data/copernicus_burnt_areas_modis_last_7d.geojson"
                         ),
                         "start_date": seven_days_ago,
                         "time_desc": "last 7 days",
@@ -94,7 +94,7 @@ class TestCopernicusFire:
                         "ext": "geojson",
                         "layer_desc": "MODIS Burnt Area Polygons",
                         "path": Path(
-                            "saved_data/copernicus-burnt-areas_modis_last_30d.geojson"
+                            "saved_data/copernicus_burnt_areas_modis_last_30d.geojson"
                         ),
                         "start_date": thirty_days_ago,
                         "time_desc": "last 30 days",
@@ -118,7 +118,7 @@ class TestCopernicusFire:
                     "ext": "geotiff",
                     "layer_desc": "ECMWF Anomaly",
                     "path": Path(
-                        "saved_data/copernicus-fire-danger-forecast_ecmwf_anomaly_1d_forecast.geotiff"
+                        "saved_data/copernicus_fire_danger_ecmwf_anomaly_1d_forecast.geotiff"
                     ),
                     "start_date": today,
                     "time_desc": "1 day forecast",
@@ -130,7 +130,7 @@ class TestCopernicusFire:
                     "ext": "geotiff",
                     "layer_desc": "ECMWF MARK-5 Drought Factor (DF)",
                     "path": Path(
-                        "saved_data/copernicus-fire-danger-forecast_ecmwf_mark5_df_1d_forecast.geotiff"
+                        "saved_data/copernicus_fire_danger_ecmwf_mark5_df_1d_forecast.geotiff"
                     ),
                     "start_date": today,
                     "time_desc": "1 day forecast",
@@ -142,7 +142,7 @@ class TestCopernicusFire:
                     "ext": "geotiff",
                     "layer_desc": "ECMWF NFDRS Spread Component (SC)",
                     "path": Path(
-                        "saved_data/copernicus-fire-danger-forecast_ecmwf_nfdrs_sc_1d_forecast.geotiff"
+                        "saved_data/copernicus_fire_danger_ecmwf_nfdrs_sc_1d_forecast.geotiff"
                     ),
                     "start_date": today,
                     "time_desc": "1 day forecast",
@@ -166,7 +166,7 @@ class TestCopernicusFire:
                     "ext": "geotiff",
                     "layer_desc": "Emissions of Black Carbon (BC)",
                     "path": Path(
-                        "saved_data/copernicus-fire-emissions_gfas_bc_last_7d.geotiff"
+                        "saved_data/copernicus_fire_emissions_gfas_bc_last_7d.geotiff"
                     ),
                     "start_date": seven_days_ago,
                     "time_desc": "last 7 days",
@@ -176,17 +176,26 @@ class TestCopernicusFire:
                 pipeline = Pipeline(configuration, downloaded_files)
 
                 # --- Burnt Area Dataset ---
-                burnt_area_dataset = pipeline.generate_dataset(
-                    "burnt_area", today=today
+                burnt_area_dataset, burnt_area_showcase = (
+                    pipeline.generate_dataset_and_showcase("burnt_area", today=today)
                 )
+                assert burnt_area_showcase is None
 
                 assert burnt_area_dataset == {
                     "dataset_date": "[2026-03-02T00:00:00 TO 2026-04-01T23:59:59]",
                     "dataset_preview": "no_preview",
                     "groups": [{"name": "world"}],
                     "name": "copernicus-burnt-areas",
-                    "notes": "Raw vector polygons of recently updated global burnt areas from "
-                    "MODIS. Provided as GeoJSON.",
+                    "notes": "Global burned area polygons derived from MODIS satellite imagery, "
+                    "providing\n"
+                    "information on spatial and temporal attributes of areas affected by "
+                    "fires.\n"
+                    "Fires are mapped using a semi-automatic procedure. Provided as "
+                    "GeoJSON.\n"
+                    "\n"
+                    "Note: the dates reported as Start date and Last update may not "
+                    "correspond to the\n"
+                    "date of ignition and extinction of the fire.",
                     "subnational": "1",
                     "tags": [
                         {
@@ -212,27 +221,27 @@ class TestCopernicusFire:
                         "description": "GeoJSON representing MODIS Burnt Area Polygons last 1 day "
                         "(31 Mar 2026-1 Apr 2026)",
                         "format": "geojson",
-                        "name": "copernicus-burnt-areas_modis_last_1d.geojson",
+                        "name": "copernicus_burnt_areas_modis_last_1d.geojson",
                     },
                     {
                         "dataset_preview_enabled": "False",
                         "description": "GeoJSON representing MODIS Burnt Area Polygons last 7 days "
                         "(25 Mar 2026-1 Apr 2026)",
                         "format": "geojson",
-                        "name": "copernicus-burnt-areas_modis_last_7d.geojson",
+                        "name": "copernicus_burnt_areas_modis_last_7d.geojson",
                     },
                     {
                         "dataset_preview_enabled": "False",
                         "description": "GeoJSON representing MODIS Burnt Area Polygons last 30 days "
                         "(2 Mar 2026-1 Apr 2026)",
                         "format": "geojson",
-                        "name": "copernicus-burnt-areas_modis_last_30d.geojson",
+                        "name": "copernicus_burnt_areas_modis_last_30d.geojson",
                     },
                 ]
 
                 # --- Fire Forecast Dataset ---
-                fire_forecast_dataset = pipeline.generate_dataset(
-                    "fire_forecast", today=today
+                fire_forecast_dataset, fire_forecast_showcase = (
+                    pipeline.generate_dataset_and_showcase("fire_forecast", today=today)
                 )
 
                 assert fire_forecast_dataset == {
@@ -240,8 +249,20 @@ class TestCopernicusFire:
                     "dataset_preview": "no_preview",
                     "groups": [{"name": "world"}],
                     "name": "copernicus-fire-danger-forecast",
-                    "notes": "Daily global forecast predicting fire danger conditions from the "
-                    "ECMWF and NASA Geos-5 models. Provided as continuous raster GeoTIFFs.",
+                    "notes": "The fire danger forecast provides daily fire danger indices. The "
+                    "continuous raster\n"
+                    "GeoTIFFs in this dataset are from the ECMWF (~8 km) and NASA Geos-5 "
+                    "(~28 km) models.\n"
+                    "\n"
+                    "The Fire Weather Index (FWI) is computed from the ECMWF and NASA "
+                    "Geos-5 models.\n"
+                    "The FWI is mapped in 6 classes: low, medium, high, very high, "
+                    "extreme and very extreme.\n"
+                    'The "Very Extreme" class was introduced in June 2021 to '
+                    "discriminate against\n"
+                    'extensive areas initially classified at "Extreme" in the '
+                    "Mediterranean region\n"
+                    "during summer months, and includes areas with FWI values above 70.",
                     "subnational": "1",
                     "tags": [
                         {
@@ -274,42 +295,84 @@ class TestCopernicusFire:
                     "description": "GeoTIFF representing ECMWF Fire Weather Index (FWI) 1 day forecast "
                     "(1 Apr 2026-2 Apr 2026)",
                     "format": "geotiff",
-                    "name": "copernicus-fire-danger-forecast_ecmwf_fwi_1d_forecast.geotiff",
+                    "name": "copernicus_fire_danger_ecmwf_fwi_1d_forecast.geotiff",
                 }
                 assert ff_resources[14] == {
                     "dataset_preview_enabled": "False",
                     "description": "GeoTIFF representing ECMWF Keetch-Byron Drought Index (KBDI) "
                     "1 day forecast (1 Apr 2026-2 Apr 2026)",
                     "format": "geotiff",
-                    "name": "copernicus-fire-danger-forecast_ecmwf_kbdi_1d_forecast.geotiff",
+                    "name": "copernicus_fire_danger_ecmwf_kbdi_1d_forecast.geotiff",
                 }
                 assert ff_resources[22] == {
                     "dataset_preview_enabled": "False",
                     "description": "GeoTIFF representing ECMWF NFDRS Ignition Probability (IC) "
                     "1 day forecast (1 Apr 2026-2 Apr 2026)",
                     "format": "geotiff",
-                    "name": "copernicus-fire-danger-forecast_ecmwf_nfdrs_ic_1d_forecast.geotiff",
+                    "name": "copernicus_fire_danger_ecmwf_nfdrs_ic_1d_forecast.geotiff",
                 }
                 assert ff_resources[23] == {
                     "dataset_preview_enabled": "False",
                     "description": "GeoTIFF representing Lightning Forecast 1 day forecast "
                     "(1 Apr 2026-2 Apr 2026)",
                     "format": "geotiff",
-                    "name": "copernicus-fire-danger-forecast_ecmwf_extra_lightning_1d_forecast.geotiff",
+                    "name": "copernicus_fire_danger_ecmwf_extra_lightning_1d_forecast.geotiff",
+                }
+                _map_url = (
+                    "https://forest-fire.emergency.copernicus.eu/apps/effis.csv/"
+                    "?c=373272.64,2379485.23&z=5&t=sentinel2&tiles="
+                    "&forecastActive=true&sourceId=ecmwf&indexId=fdf.ecmwf007.fwi"
+                    "&forecastDate=2026-04-02&rdaFrom=2026-04-01&rdaTo=2026-04-02"
+                    "&rdaDateRange=today&layerInfoPoint&fdcPoint&fdcDate"
+                )
+                assert fire_forecast_showcase == {
+                    "name": "copernicus-fire-danger-forecast-showcase",
+                    "title": "Fire Danger Forecast Interactive Map",
+                    "notes": "Interactive map showing ECMWF Fire Weather Index (FWI) forecast",
+                    "url": _map_url,
+                    "image_url": "https://forest-fire.emergency.copernicus.eu/static/assets/images/effis.apps.csv.png",
+                    "tags": [
+                        {
+                            "name": "climate hazards",
+                            "vocabulary_id": "b891512e-9516-4bf5-962a-7a289772a2a1",
+                        },
+                        {
+                            "name": "forecasting",
+                            "vocabulary_id": "b891512e-9516-4bf5-962a-7a289772a2a1",
+                        },
+                        {
+                            "name": "hazards and risk",
+                            "vocabulary_id": "b891512e-9516-4bf5-962a-7a289772a2a1",
+                        },
+                    ],
                 }
 
                 # --- Fire Emissions Dataset ---
-                fire_emissions_dataset = pipeline.generate_dataset(
-                    "fire_emissions", today=today
+                fire_emissions_dataset, fire_emissions_showcase = (
+                    pipeline.generate_dataset_and_showcase(
+                        "fire_emissions", today=today
+                    )
                 )
+                assert fire_emissions_showcase is None
 
                 assert fire_emissions_dataset == {
                     "dataset_date": "[2026-03-25T00:00:00 TO 2026-04-01T23:59:59]",
                     "dataset_preview": "no_preview",
                     "groups": [{"name": "world"}],
                     "name": "copernicus-fire-emissions",
-                    "notes": "Daily global fire emissions from the Copernicus Atmosphere Monitoring "
-                    "Service (CAMS) Global Fire Assimilation System (GFAS). Provided as "
+                    "notes": "The CAMS Global Fire Assimilation System (GFAS) utilises satellite "
+                    "observations of\n"
+                    "fire radiative power (FRP) to provide near-real-time information on "
+                    "the location,\n"
+                    "relative intensity and estimated emissions from biomass burning and "
+                    "vegetation\n"
+                    "fires.\n"
+                    "\n"
+                    "Emissions are estimated by conversion of FRP observations to the "
+                    "dry matter (DM)\n"
+                    "consumed by the fire, and application of emission factors to DM for "
+                    "different\n"
+                    "biomes, based on field and laboratory studies. Provided as "
                     "continuous raster GeoTIFFs.",
                     "subnational": "1",
                     "tags": [
@@ -337,12 +400,12 @@ class TestCopernicusFire:
                     "description": "GeoTIFF representing Emissions of Black Carbon (BC) last 7 days "
                     "(25 Mar 2026-1 Apr 2026)",
                     "format": "geotiff",
-                    "name": "copernicus-fire-emissions_gfas_bc_last_7d.geotiff",
+                    "name": "copernicus_fire_emissions_gfas_bc_last_7d.geotiff",
                 }
                 assert fe_resources[10] == {
                     "dataset_preview_enabled": "False",
                     "description": "GeoTIFF representing Emissions of Total Carbon in Aerosols (TC) "
                     "last 7 days (25 Mar 2026-1 Apr 2026)",
                     "format": "geotiff",
-                    "name": "copernicus-fire-emissions_gfas_tc_last_7d.geotiff",
+                    "name": "copernicus_fire_emissions_gfas_tc_last_7d.geotiff",
                 }

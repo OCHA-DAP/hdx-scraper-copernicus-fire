@@ -1,10 +1,11 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from hdx.api.configuration import Configuration
 from hdx.data.dataset import Dataset
 from hdx.data.resource import Resource
+from hdx.data.showcase import Showcase
 from hdx.utilities.dateparse import default_date, default_enddate
 
 logger = logging.getLogger(__name__)
@@ -37,7 +38,9 @@ class Pipeline:
         resource.set_file_to_upload(file_path)
         return resource
 
-    def generate_dataset(self, data_type: str, today: datetime) -> Dataset | None:
+    def generate_dataset_and_showcase(
+        self, data_type: str, today: datetime
+    ) -> tuple[Dataset, Showcase | None] | None:
         dataset_info = self._configuration["datasets"].get(data_type)
         if not dataset_info:
             return None
@@ -75,7 +78,8 @@ class Pipeline:
         )
         dataset.set_time_period(start_date, end_date)
 
-        dataset.add_tags(dataset_info.get("tags", []))
+        tags = dataset_info["tags"]
+        dataset.add_tags(tags)
         dataset.set_subnational(True)
         dataset.add_other_location("world")
 
@@ -103,5 +107,29 @@ class Pipeline:
             dataset.add_update_resource(
                 self.generate_resource(file_path.name, res_desc, file_path, ext)
             )
+
+        showcase = None
+        showcase_info = dataset_info.get("showcase")
+        if showcase_info:
+            forecast_date = (today + timedelta(days=1)).strftime("%Y-%m-%d")
+            today_str = today.strftime("%Y-%m-%d")
+            map_url = (
+                "https://forest-fire.emergency.copernicus.eu/apps/effis.csv/"
+                f"?c=373272.64,2379485.23&z=5&t=sentinel2&tiles="
+                f"&forecastActive=true&sourceId=ecmwf&indexId=fdf.ecmwf007.fwi"
+                f"&forecastDate={forecast_date}&rdaFrom={today_str}&rdaTo={forecast_date}"
+                f"&rdaDateRange=today&layerInfoPoint&fdcPoint&fdcDate"
+            )
+            showcase = Showcase(
+                {
+                    "name": f"{dataset_info['name']}-showcase",
+                    "title": f"{dataset_info['title']} Interactive Map",
+                    "notes": showcase_info["notes"],
+                    "url": map_url,
+                    "image_url": showcase_info["image_url"],
+                }
+            )
+            showcase.add_tags(tags)
+
         dataset.preview_off()
-        return dataset
+        return dataset, showcase

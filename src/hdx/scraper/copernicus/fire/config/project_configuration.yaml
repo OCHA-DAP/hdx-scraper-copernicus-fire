@@ -8,13 +8,25 @@ datasets:
   fire_forecast:
     name: "copernicus-fire-danger-forecast"
     title: "Fire Danger Forecast"
-    notes: "Daily global forecast predicting fire danger conditions from the ECMWF and NASA Geos-5 models. Provided as continuous raster GeoTIFFs."
+    notes: |-
+      The fire danger forecast provides daily fire danger indices. The continuous raster
+      GeoTIFFs in this dataset are from the ECMWF (~8 km) and NASA Geos-5 (~28 km) models.
+
+      The Fire Weather Index (FWI) is computed from the ECMWF and NASA Geos-5 models.
+      The FWI is mapped in 6 classes: low, medium, high, very high, extreme and very extreme.
+      The "Very Extreme" class was introduced in June 2021 to discriminate against
+      extensive areas initially classified at "Extreme" in the Mediterranean region
+      during summer months, and includes areas with FWI values above 70.
+    resource_name: "copernicus_fire_danger"
     method: "wms"
     format: "image/tiff"
     ext: "geotiff"
     forecast: true
     days: 1
     tags: [ "climate hazards", "forecasting", "hazards and risk" ]
+    showcase:
+      notes: "Interactive map showing ECMWF Fire Weather Index (FWI) forecast"
+      image_url: "https://forest-fire.emergency.copernicus.eu/static/assets/images/effis.apps.csv.png"
     layers:
       ecmwf_fwi:
         endpoint: "gwis"
@@ -116,7 +128,14 @@ datasets:
   burnt_area:
     name: "copernicus-burnt-areas"
     title: "Burnt Areas (MODIS)"
-    notes: "Raw vector polygons of recently updated global burnt areas from MODIS. Provided as GeoJSON."
+    notes: |-
+      Global burned area polygons derived from MODIS satellite imagery, providing
+      information on spatial and temporal attributes of areas affected by fires.
+      Fires are mapped using a semi-automatic procedure. Provided as GeoJSON.
+
+      Note: the dates reported as Start date and Last update may not correspond to the
+      date of ignition and extinction of the fire.
+    resource_name: "copernicus_burnt_areas"
     method: "wfs"
     format: "geojson"
     ext: "geojson"
@@ -132,7 +151,16 @@ datasets:
   fire_emissions:
     name: "copernicus-fire-emissions"
     title: "Fire Emissions (CAMS-GFAS)"
-    notes: "Daily global fire emissions from the Copernicus Atmosphere Monitoring Service (CAMS) Global Fire Assimilation System (GFAS). Provided as continuous raster GeoTIFFs."
+    notes: |-
+      The CAMS Global Fire Assimilation System (GFAS) utilises satellite observations of
+      fire radiative power (FRP) to provide near-real-time information on the location,
+      relative intensity and estimated emissions from biomass burning and vegetation
+      fires.
+
+      Emissions are estimated by conversion of FRP observations to the dry matter (DM)
+      consumed by the fire, and application of emission factors to DM for different
+      biomes, based on field and laboratory studies. Provided as continuous raster GeoTIFFs.
+    resource_name: "copernicus_fire_emissions"
     method: "wms"
     format: "image/tiff"
     ext: "geotiff"

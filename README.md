@@ -1,4 +1,4 @@
-# Collector for Copernicus-fire Datasets
+# Collector for Copernicus Fire Datasets
 [![Build Status](https://github.com/OCHA-DAP/hdx-scraper-copernicus-fire/actions/workflows/run-python-tests.yaml/badge.svg)](https://github.com/OCHA-DAP/hdx-scraper-copernicus-fire/actions/workflows/run-python-tests.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-scraper-copernicus-fire/badge.svg?branch=main&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-scraper-copernicus-fire?branch=main)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)

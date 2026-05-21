@@ -1,5 +1,4 @@
-license_id: hdx-other
-license_other: Please see licence information [here](https://forest-fire.emergency.copernicus.eu/about-effis/data-license).
+license_id: cc-by
 methodology: Other
 methodology_other: More information on methodology can be found [here](https://forest-fire.emergency.copernicus.eu/about-effis/technical-background).
 dataset_source: Copernicus
@@ -8,4 +7,13 @@ private: False
 maintainer: 196196be-6037-4488-8b71-d786adf4c081
 owner_org:  47677055-92e2-4f68-bf1b-5d570f27e791
 data_update_frequency: 1
-caveats:
+caveats: >-
+  Data sourced from the [European Forest Fire Information System
+  (EFFIS)](https://forest-fire.emergency.copernicus.eu) and [Global Wildfire
+  Information System (GWIS)](https://gwis.jrc.ec.europa.eu), operated by the
+  European Commission's Joint Research Centre (JRC). Original data collections:
+  [EFFIS](https://data.jrc.ec.europa.eu/collection/id-0070) and
+  [GWIS](https://data.jrc.ec.europa.eu/collection/id-0071). Licensed under [CC
+  BY 4.0](https://creativecommons.org/licenses/by/4.0/). Data has been
+  downloaded from EFFIS/GWIS WMS/WFS services and may constitute derivative
+  data.

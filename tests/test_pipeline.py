@@ -47,10 +47,13 @@ class TestCopernicusFire:
                             "https://maps.effis.emergency.copernicus.eu/effis"
                             "?service=WFS&request=getfeature&typename=ms:modis.ba.poly"
                             "&version=1.1.0&outputformat=geojson"
-                            "&FILTER=%3CFilter%3E%3CPropertyIsGreaterThanOrEqualTo%3E"
+                            "&FILTER=%3CFilter%3E%3CAnd%3E%3CPropertyIsGreaterThanOrEqualTo%3E"
                             "%3CPropertyName%3ELASTUPDATE%3C/PropertyName%3E"
-                            "%3CLiteral%3E2026-03-31/2026-04-01%3C/Literal%3E"
-                            "%3C/PropertyIsGreaterThanOrEqualTo%3E%3C/Filter%3E"
+                            "%3CLiteral%3E2026-03-31%3C/Literal%3E"
+                            "%3C/PropertyIsGreaterThanOrEqualTo%3E%3CPropertyIsLessThan%3E"
+                            "%3CPropertyName%3ELASTUPDATE%3C/PropertyName%3E"
+                            "%3CLiteral%3E2026-04-01%3C/Literal%3E"
+                            "%3C/PropertyIsLessThan%3E%3C/And%3E%3C/Filter%3E"
                         ),
                         "end_date": today,
                         "ext": "geojson",
@@ -66,10 +69,13 @@ class TestCopernicusFire:
                             "https://maps.effis.emergency.copernicus.eu/effis"
                             "?service=WFS&request=getfeature&typename=ms:modis.ba.poly"
                             "&version=1.1.0&outputformat=geojson"
-                            "&FILTER=%3CFilter%3E%3CPropertyIsGreaterThanOrEqualTo%3E"
+                            "&FILTER=%3CFilter%3E%3CAnd%3E%3CPropertyIsGreaterThanOrEqualTo%3E"
                             "%3CPropertyName%3ELASTUPDATE%3C/PropertyName%3E"
-                            "%3CLiteral%3E2026-03-25/2026-04-01%3C/Literal%3E"
-                            "%3C/PropertyIsGreaterThanOrEqualTo%3E%3C/Filter%3E"
+                            "%3CLiteral%3E2026-03-25%3C/Literal%3E"
+                            "%3C/PropertyIsGreaterThanOrEqualTo%3E%3CPropertyIsLessThan%3E"
+                            "%3CPropertyName%3ELASTUPDATE%3C/PropertyName%3E"
+                            "%3CLiteral%3E2026-04-01%3C/Literal%3E"
+                            "%3C/PropertyIsLessThan%3E%3C/And%3E%3C/Filter%3E"
                         ),
                         "end_date": today,
                         "ext": "geojson",
@@ -85,10 +91,13 @@ class TestCopernicusFire:
                             "https://maps.effis.emergency.copernicus.eu/effis"
                             "?service=WFS&request=getfeature&typename=ms:modis.ba.poly"
                             "&version=1.1.0&outputformat=geojson"
-                            "&FILTER=%3CFilter%3E%3CPropertyIsGreaterThanOrEqualTo%3E"
+                            "&FILTER=%3CFilter%3E%3CAnd%3E%3CPropertyIsGreaterThanOrEqualTo%3E"
                             "%3CPropertyName%3ELASTUPDATE%3C/PropertyName%3E"
-                            "%3CLiteral%3E2026-03-02/2026-04-01%3C/Literal%3E"
-                            "%3C/PropertyIsGreaterThanOrEqualTo%3E%3C/Filter%3E"
+                            "%3CLiteral%3E2026-03-02%3C/Literal%3E"
+                            "%3C/PropertyIsGreaterThanOrEqualTo%3E%3CPropertyIsLessThan%3E"
+                            "%3CPropertyName%3ELASTUPDATE%3C/PropertyName%3E"
+                            "%3CLiteral%3E2026-04-01%3C/Literal%3E"
+                            "%3C/PropertyIsLessThan%3E%3C/And%3E%3C/Filter%3E"
                         ),
                         "end_date": today,
                         "ext": "geojson",

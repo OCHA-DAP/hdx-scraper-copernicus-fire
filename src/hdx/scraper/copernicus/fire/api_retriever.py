@@ -27,11 +27,20 @@ class APIRetriever:
         out_format: str,
     ) -> tuple[Path | None, str]:
         """Downloads WFS GeoJSON exactly as the server provides it."""
+        # LASTUPDATE is compared as a string, e.g. "2026-10-14 07:47:40.96", so
+        # "start/end" as one literal sorts after every timestamp on the start day
+        start_str, end_str = date_str.split("/")
         xml_filter = (
-            f"<Filter><PropertyIsGreaterThanOrEqualTo>"
+            f"<Filter><And>"
+            f"<PropertyIsGreaterThanOrEqualTo>"
             f"<PropertyName>LASTUPDATE</PropertyName>"
-            f"<Literal>{date_str}</Literal>"
-            f"</PropertyIsGreaterThanOrEqualTo></Filter>"
+            f"<Literal>{start_str}</Literal>"
+            f"</PropertyIsGreaterThanOrEqualTo>"
+            f"<PropertyIsLessThan>"
+            f"<PropertyName>LASTUPDATE</PropertyName>"
+            f"<Literal>{end_str}</Literal>"
+            f"</PropertyIsLessThan>"
+            f"</And></Filter>"
         )
         encoded_filter = urllib.parse.quote(xml_filter)
 
